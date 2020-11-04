@@ -3,11 +3,13 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from tigerevents import db, login_manager
 from flask import current_app
 from flask_login import UserMixin
+from sqlalchemy import create_engine
+
+DATABASE_URI = 'postgres+psycopg2://postgres:password@localhost:5432/EventsDB'
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 # class models
 class User(db.Model, UserMixin):
