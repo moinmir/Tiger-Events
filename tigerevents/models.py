@@ -66,6 +66,7 @@ class Organization(db.Model):
     # relationships
     tags = db.relationship("Tag", secondary="org_tags")
     events = db.relationship("Event", backref="host", lazy=True)
+    followers = db.relationship("User", secondary='follow')
 
     def __repr__(self):
         return f"Campaign('{self.name}', '{self.events}')"
@@ -105,10 +106,10 @@ class Going(db.Model):
 class Follow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    org_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    org_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
 
     user = db.relationship(User, backref=db.backref("follow", cascade="all, delete-orphan"))
-    org = db.relationship(Event, backref=db.backref("follow", cascade="all, delete-orphan"))
+    org = db.relationship(Organization, backref=db.backref("follow", cascade="all, delete-orphan"))
 
 # 4. Event tags
 class Event_tags(db.Model):
