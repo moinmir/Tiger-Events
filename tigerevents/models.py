@@ -1,134 +1,125 @@
 from datetime import datetime
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from tigerevents import db, login_manager
-from flask import current_app
 from flask_login import UserMixin
-from sqlalchemy import create_engine
 
-DATABASE_URI = 'postgres+psycopg2://postgres:password@localhost:5432/EventsDB'
-
+# get user object
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# class models
+#####################################################################
+# Association Models/Tables                                         #
+#####################################################################
+# 1. Events saved by user
+class Saved(db.Model):
+    __tablename__ = 'a_saved'
+    # foreign keys
+    user_id = db.Column(db.Integer, db.ForeignKey('nice_user.id'), primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('nice_event.id'), primary_key=True)
+
+    # extra data
+    going = db.Column(db.Boolean, unique=False, default=False)
+
+    event = db.relationship("Event", back_populates="participants" )
+    user = db.relationship("User", back_populates="events")
+
+a_follow = db.Table("follow",
+                    db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
+                    db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'))
+                   )
+
+#####################################################################
+
+#####################################################################
+# Class Models                                                      #
+#####################################################################
 class User(db.Model, UserMixin):
+    __tablename__ = 'nice_user'
+    # attributes
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
 
-    # many to many relationships
-    maybe_e = db.relationship("Event", secondary="saved")
-    going_e = db.relationship("Event", secondary="going")
-    following = db.relationship("Organization", secondary="follow")
+    # relationships - all many to many
+    # association object
+    events = db.relationship("Saved", 
+                             back_populates="user", 
+                             cascade="all, delete-orphan")
 
-    def get_reset_token(self, expires_sec=1800):
-        s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-        return s.dumps({'user_id':self.id}).decode('utf-8')
-
-    @staticmethod
-    def verify_reset_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token)['user_id']
-        except:
-            return None
-        return User.query.get(user_id)
-
+    # association table
+    following = db.relationship("Organization",
+                             secondary=a_follow,
+                             back_populates="followers",
+                                ) 
+                           
+    # functions/methods
     def __repr__(self):
         return f"User('{self.email}')"
-
+#####################################################################
 
 class Event(db.Model):
+    __tablename__='nice_event'
+    # attributes
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     description = db.Column(db.Text, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default="default_campaign.jpg")
     
-    # relationships - many to many
-    maybe_u = db.relationship("User", secondary="saved") 
-    going_u = db.relationship("User", secondary="going")
-    tags = db.relationship("Tag", secondary="event_tags")
+    # relationships
+    # association object
+    participants = db.relationship("Saved", 
+                                   back_populates="event", 
+                                   cascade="all, delete-orphan")
+    
+    org_id = db.Column(db.Integer, db.ForeignKey("nice_organization.id"), nullable=False)
 
-    org_id = db.Column(db.Integer, db.ForeignKey("organization.id"), nullable=False)
-
-
+    # functions/methods
     def __repr__(self):
-        return f"Event('{self.title}', '{self.date_posted}', '{self.host}')"
-
+        return f"Event('{self.title}', '{self.date_posted}')"
+#####################################################################
 
 class Organization(db.Model):
+    __tablename__='nice_organization'
+
+    # attributes
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default="default_organization.jpg")
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     description = db.Column(db.Text, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default="default_campaign.jpg")
 
     # relationships
-    tags = db.relationship("Tag", secondary="org_tags")
+    # followers = db.relationship("User", secondary='follow') 
     events = db.relationship("Event", backref="host", lazy=True)
-    followers = db.relationship("User", secondary='follow')
 
+    followers = db.relationship("User",
+                                secondary=a_follow,
+                                back_populates="following",
+                                )
+    
+    tags = db.relationship("Tag",
+                           secondary=org_tags,
+                           back_populates="organizations")
+
+    # functions/methods
     def __repr__(self):
-        return f"Campaign('{self.name}', '{self.events}')"
+        return f"Event('{self.name}', '{self.date_created}')"
+####################################################################
 
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+# class Tag(db.Model):
+#     __tablename__='nice_tag'
 
-    # relationships
-    events = db.relationship("Event", secondary="event_tag")
-    organizations = db.relationship("Organization", secondary="org_tag")
+#     # attributes
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100), nullable=False)
 
+#     # relationship
+#     organizations = db.relationship("Organization",
+#                                     secondary=org_tags,
+#                                     back_populates="tags")
 
+####################################################################
 
-# association tables
-
-# 1. Events saved by user
-class Saved(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
-
-    user = db.relationship(User, backref=db.backref("saved", cascade="all, delete-orphan"))
-    event = db.relationship(Event, backref=db.backref("saved", cascade="all, delete-orphan"))
-    
-# 2. Events user is going to 
-class Going(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
-
-    user = db.relationship(User, backref=db.backref("going", cascade="all, delete-orphan"))
-    event = db.relationship(Event, backref=db.backref("going", cascade="all, delete-orphan"))
-
-
-# 3. Organizations followed by user
-class Follow(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    org_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
-
-    user = db.relationship(User, backref=db.backref("follow", cascade="all, delete-orphan"))
-    org = db.relationship(Organization, backref=db.backref("follow", cascade="all, delete-orphan"))
-
-# 4. Event tags
-class Event_tags(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
-
-    event = db.relationship(User, backref=db.backref("event_tags", cascade="all, delete-orphan"))
-    tag = db.relationship(Event, backref=db.backref("event_tags", cascade="all, delete-orphan"))
-
-# 5. Organization tags
-class Org_tags(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    org_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
-
-    event = db.relationship(User, backref=db.backref("org_tags", cascade="all, delete-orphan"))
-    tag = db.relationship(Event, backref=db.backref("org_tags", cascade="all, delete-orphan"))
-    
 
