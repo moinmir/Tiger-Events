@@ -1,5 +1,5 @@
 from tigerevents import db
-from tigerevents.models import User, Event, Saved, Organization
+from tigerevents.models import User, Event, Saved, Organization, Tag
 
 db.drop_all()
 db.create_all()
@@ -38,7 +38,24 @@ def create_sample_db():
     db.session.add(event4)
     db.session.add(event5)
     db.session.commit()
-   
+    
+    # dummy tags
+    tag1 = Tag(name="Study Breaks")
+    tag2 = Tag(name="Residential Colleges")
+    tag3 = Tag(name="Technology")
+    tag4 = Tag(name="Panel Discussion")
+    tag5 = Tag(name="Politics")
+    tag6 = Tag(name="Career")
+    tag7 = Tag(name="Free Stuff")
+    db.session.add(tag1)
+    db.session.add(tag2)
+    db.session.add(tag3)
+    db.session.add(tag4)
+    db.session.add(tag5)
+    db.session.add(tag6)
+    db.session.add(tag7)
+    db.session.commit()
+
     # creating event-user relationships
     # user1: S = [1,2,3] G = [2]
     # user2: S = [1,3,4,5] G = [1,4]
@@ -105,9 +122,19 @@ def create_sample_db():
     user3.following.append(org3)
     user3.following.append(org4)
 
-
-
-
+    # add tags to organizations
+    # org1 = [3,6]
+    # org2 = [3]
+    # org3 = [1,2,7]
+    # org4 = [4,5]
+    org1.tags.append(tag3)
+    org1.tags.append(tag6)
+    org2.tags.append(tag3)
+    org3.tags.append(tag1)
+    org3.tags.append(tag2)
+    org3.tags.append(tag7)
+    org4.tags.append(tag4)
+    org4.tags.append(tag5)
 
 
 def user_event_test():
@@ -215,6 +242,60 @@ def user_org_test():
     change_user_data()
     print_user_data()
         
+
+def org_tag_test():
+
+    create_sample_db()
+
+    orgs = Organization.query.all()
+    tags = Tag.query.all()
+
+    def print_org_data():
+        org1 = [tag.name for tag in orgs[0].tags]
+        print("----------------------------------------------------------------")
+        print(orgs[0].name, "tags:")
+        print(*org1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        org2 = [tag.name for tag in orgs[1].tags]
+        print("----------------------------------------------------------------")
+        print(orgs[1].name, "tags:")
+        print(*org2, sep=', ')
+        print("----------------------------------------------------------------")
+
+        org3 = [tag.name for tag in orgs[2].tags]
+        print("----------------------------------------------------------------")
+        print(orgs[2].name, "tags:")
+        print(*org3, sep=', ')
+        print("----------------------------------------------------------------")
+
+        org4 = [tag.name for tag in orgs[3].tags]
+        print("----------------------------------------------------------------")
+        print(orgs[3].name, "tags:")
+        print(*org4, sep=', ')
+        print("----------------------------------------------------------------")
+
+    def print_tag_data():
+        tag1 = [org.name for org in tags[0].organizations]
+        print("----------------------------------------------------------------")
+        print(tags[0].name, "Organizations:")
+        print(*tag1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag3 = [org.name for org in tags[2].organizations]
+        print("----------------------------------------------------------------")
+        print(tags[2].name, "Organizations:")
+        print(*tag3, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag7 = [org.name for org in tags[6].organizations]
+        print("----------------------------------------------------------------")
+        print(tags[6].name, "Organizations:")
+        print(*tag7, sep=', ')
+        print("----------------------------------------------------------------")
+
+    print_org_data()
+    print_tag_data()
 
 
 
