@@ -28,6 +28,11 @@ a_follow = db.Table("follow",
                     db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'))
                    )
 
+a_org_tags = db.Table("org_tags",
+                      db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id')),
+                      db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                     )
+
 #####################################################################
 
 #####################################################################
@@ -95,7 +100,6 @@ class Organization(db.Model):
     image_file = db.Column(db.String(20), nullable=False, default="default_campaign.jpg")
 
     # relationships
-    # followers = db.relationship("User", secondary='follow') 
     events = db.relationship("Event", backref="host", lazy=True)
 
     followers = db.relationship("User",
@@ -104,7 +108,7 @@ class Organization(db.Model):
                                 )
     
     tags = db.relationship("Tag",
-                           secondary=org_tags,
+                           secondary=a_org_tags,
                            back_populates="organizations")
 
     # functions/methods
@@ -112,16 +116,17 @@ class Organization(db.Model):
         return f"Event('{self.name}', '{self.date_created}')"
 ####################################################################
 
-# class Tag(db.Model):
-#     __tablename__='nice_tag'
+class Tag(db.Model):
+    __tablename__='nice_tag'
 
-#     # attributes
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), nullable=False)
+    # attributes
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
 
-#     # relationship
-#     organizations = db.relationship("Organization",
-#                                     secondary=org_tags,
-#                                     back_populates="tags")
+    # relationship
+    organizations = db.relationship("Organization",
+                                    secondary=a_org_tags,
+                                    back_populates="tags")
+
 
 ####################################################################
