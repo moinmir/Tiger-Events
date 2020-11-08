@@ -33,6 +33,16 @@ a_org_tags = db.Table("org_tags",
                       db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
                      )
 
+a_event_tags = db.Table("event_tags",
+                        db.Column("event_id", db.Integer, db.ForeignKey('nice_event.id')),
+                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                       )
+
+a_user_tags = db.Table("user_tags",
+                        db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
+                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                      )
+
 #####################################################################
 
 #####################################################################
@@ -54,9 +64,13 @@ class User(db.Model, UserMixin):
 
     # association table
     following = db.relationship("Organization",
-                             secondary=a_follow,
-                             back_populates="followers",
-                                ) 
+                                secondary=a_follow,
+                                back_populates="followers",
+                               )
+
+    tags = db.relationship("Tag",
+                           secondary=a_user_tags,
+                           back_populates="users") 
                            
     # functions/methods
     def __repr__(self):
@@ -78,6 +92,10 @@ class Event(db.Model):
     participants = db.relationship("Saved", 
                                    back_populates="event", 
                                    cascade="all, delete-orphan")
+
+    tags = db.relationship("Tag",
+                           secondary=a_event_tags,
+                           back_populates="events")
     
     org_id = db.Column(db.Integer, db.ForeignKey("nice_organization.id"), nullable=False)
 
@@ -128,5 +146,15 @@ class Tag(db.Model):
                                     secondary=a_org_tags,
                                     back_populates="tags")
 
+    events = db.relationship("Event",
+                             secondary=a_event_tags,
+                             back_populates="tags")
+    
+    users = db.relationship("User",
+                             secondary=a_event_tags,
+                             back_populates="tags")
 
+    # functions/methods
+    def __repr__(self):
+        return f"Event('{self.name}')"
 ####################################################################

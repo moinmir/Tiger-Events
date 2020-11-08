@@ -136,6 +136,8 @@ def create_sample_db():
     org4.tags.append(tag4)
     org4.tags.append(tag5)
 
+    # add tags to events
+    # add tags to users
 
 def user_event_test():
 
