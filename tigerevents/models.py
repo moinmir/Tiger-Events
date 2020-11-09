@@ -151,7 +151,7 @@ class Tag(db.Model):
                              back_populates="tags")
     
     users = db.relationship("User",
-                             secondary=a_event_tags,
+                             secondary=a_user_tags,
                              back_populates="tags")
 
     # functions/methods

@@ -113,35 +113,36 @@ def create_sample_db():
     # user1: F = [2,3]
     # user2: F = [1,4]
     # user3: F = [1,2,3,4]
-    user1.following.append(org2)
-    user1.following.append(org3)
-    user2.following.append(org1)
-    user2.following.append(org4)
-    user3.following.append(org1)
-    user3.following.append(org2)
-    user3.following.append(org3)
-    user3.following.append(org4)
+    user1.following.extend((org2, org3))
+    user2.following.extend((org1, org4))
+    user3.following.extend((org1, org2, org3, org4))
 
     # add tags to organizations
     # org1 = [3,6]
     # org2 = [3]
     # org3 = [1,2,7]
     # org4 = [4,5]
-    org1.tags.append(tag3)
-    org1.tags.append(tag6)
+    org1.tags.extend((tag3, tag6))
     org2.tags.append(tag3)
-    org3.tags.append(tag1)
-    org3.tags.append(tag2)
-    org3.tags.append(tag7)
-    org4.tags.append(tag4)
-    org4.tags.append(tag5)
+    org3.tags.extend((tag1, tag2, tag7))
+    org4.tags.extend((tag4, tag5))
 
     # add tags to events
+    # event1 = [3,6,7], event2 = [1,2,7], event3 = [3]
+    # event4 = [4,5], event5 = [1,2,7]
+    event1.tags.extend((tag3, tag6, tag7))
+    event2.tags.extend((tag1, tag2, tag7))
+    event3.tags.append(tag3)
+    event4.tags.extend((tag4, tag5))
+    event5.tags.extend((tag1, tag2, tag7))
+
     # add tags to users
+    # user1 = [3,4], user2 = [2,7], user3= [1,5,6]
+    user1.tags.extend((tag3, tag4))
+    user2.tags.extend((tag2, tag7))
+    user3.tags.extend((tag1, tag5, tag6))
 
 def user_event_test():
-
-    create_sample_db()
 
     # getting all users
     users = User.query.all()
@@ -189,8 +190,6 @@ def user_event_test():
 
 # tests the relationship between users and organization: Following, Unfollowing
 def user_org_test():
-
-    create_sample_db()
 
     # getting all users
     users = User.query.all()
@@ -247,8 +246,6 @@ def user_org_test():
 
 def org_tag_test():
 
-    create_sample_db()
-
     orgs = Organization.query.all()
     tags = Tag.query.all()
 
@@ -300,8 +297,108 @@ def org_tag_test():
     print_tag_data()
 
 
+def user_tag_test():
 
+    users = User.query.all()
+    tags = Tag.query.all()
 
+    def print_user_data():
+        user1 = [tag.name for tag in users[0].tags]
+        print("----------------------------------------------------------------")
+        print(users[0].name, "tags:")
+        print(*user1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        user2 = [tag.name for tag in users[1].tags]
+        print("----------------------------------------------------------------")
+        print(users[1].name, "tags:")
+        print(*user2, sep=', ')
+        print("----------------------------------------------------------------")
+
+        user3 = [tag.name for tag in users[2].tags]
+        print("----------------------------------------------------------------")
+        print(users[2].name, "tags:")
+        print(*user3, sep=', ')
+        print("----------------------------------------------------------------")
+
+    def print_tag_data():
+        tag1 = [user.name for user in tags[0].users]
+        print("----------------------------------------------------------------")
+        print(tags[0].name, "users:")
+        print(*tag1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag3 = [user.name for user in tags[2].users]
+        print("----------------------------------------------------------------")
+        print(tags[2].name, "users:")
+        print(*tag3, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag7 = [user.name for user in tags[6].users]
+        print("----------------------------------------------------------------")
+        print(tags[6].name, "users:")
+        print(*tag7, sep=', ')
+        print("----------------------------------------------------------------")
+
+    print_user_data()
+    print_tag_data()
+
+def event_tag_test():
+
+    events = Event.query.all()
+    tags = Tag.query.all()
+    def print_event_data():
+        event1 = [tag.name for tag in events[0].tags]
+        print("----------------------------------------------------------------")
+        print(events[0].title, "tags:")
+        print(*event1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        event2 = [tag.name for tag in events[1].tags]
+        print("----------------------------------------------------------------")
+        print(events[1].title, "tags:")
+        print(*event2, sep=', ')
+        print("----------------------------------------------------------------")
+
+        event3 = [tag.name for tag in events[2].tags]
+        print("----------------------------------------------------------------")
+        print(events[2].title, "tags:")
+        print(*event3, sep=', ')
+        print("----------------------------------------------------------------")
+
+        event4 = [tag.name for tag in events[3].tags]
+        print("----------------------------------------------------------------")
+        print(events[3].title, "tags:")
+        print(*event4, sep=', ')
+        print("----------------------------------------------------------------")
+
+        event5 = [tag.name for tag in events[4].tags]
+        print("----------------------------------------------------------------")
+        print(events[4].title, "tags:")
+        print(*event5, sep=', ')
+        print("----------------------------------------------------------------")
+        
+    def print_tag_data():
+        tag1 = [event.title for event in tags[0].events]
+        print("----------------------------------------------------------------")
+        print(tags[0].title, "events:")
+        print(*tag1, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag3 = [event.title for event in tags[2].events]
+        print("----------------------------------------------------------------")
+        print(tags[2].name, "events:")
+        print(*tag3, sep=', ')
+        print("----------------------------------------------------------------")
+
+        tag7 = [event.title for event in tags[6].events]
+        print("----------------------------------------------------------------")
+        print(tags[6].name, "events:")
+        print(*tag7, sep=', ')
+        print("----------------------------------------------------------------")
+
+    print_event_data()
+    print_tag_data()
     
 
 
