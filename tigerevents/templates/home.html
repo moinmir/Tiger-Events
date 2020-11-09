@@ -1,3 +1,21 @@
-{% extends "layout.html" %} {% block content %}
-<h1>Homepage</h1>
+{% extends "layout.html" %}
+{% block content %}
+<h1 style="color:rgb(2, 2, 0)">Events</h1>
+<style>
+    body {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+</style>
+{% for event in events.items %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <div class="media-body">
+        <h2><a class="article-title"
+                href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
+        <p class="article-content">{{ event.description }}</p>
+    </div>
+</article>
+{% endfor %} 
 {% endblock content %}

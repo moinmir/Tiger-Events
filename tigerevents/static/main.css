@@ -8,7 +8,7 @@ h1, h2, h3, h4, h5, h6 { font-family: Times, 'Times New Roman', serif;
     color: #000000; }
 
 .bg-steel {
-    background-color: #72baf5;
+    background-color: #ff8800;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 { font-family: Times, 'Times New Roman', serif;
 }
 
 a.article-title:hover {
-    color: #428bca;
+    color: #ff8800;
     text-decoration: none;
 }
 
