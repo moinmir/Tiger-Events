@@ -64,8 +64,9 @@ def login():
 @users.route("/myevents", methods=["GET", "POST"])
 @login_required
 def myevents():
+    events = Event.query
     return render_template(
-        "myevents.html", title="My Events"
+        "myevents.html", title="My Events", events=events
     )
 
 
