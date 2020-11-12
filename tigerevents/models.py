@@ -24,15 +24,10 @@ class Saved(db.Model):
     event = db.relationship("Event", back_populates="participants" )
     user = db.relationship("User", back_populates="events")
 
-class Follow(db.Model):
-    __tablename__ = 'a_follow'
-
-    # foreign keys
-    user_id = db.Column(db.Integer, db.ForeignKey('nice_user.id'), primary_key=True)
-    org_id = db.Column(db.Integer, db.ForeignKey('nice_organization.id'), primary_key=True)
-
-    organization = db.relationship("Organization", back_populates="followers" )
-    user = db.relationship("User", back_populates="following")
+a_follow = db.Table("follow",
+                    db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
+                    db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'))
+                   )
 
 a_org_tags = db.Table("org_tags",
                       db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id')),
@@ -69,9 +64,9 @@ class User(db.Model, UserMixin):
                              cascade="all, delete-orphan")
 
     # association table
-    following = db.relationship("Follow",
-                                back_populates="user",
-                                cascade="all, delete-orphan"
+    following = db.relationship("Organization",
+                                secondary=a_follow,
+                                back_populates="followers",
                                )
 
     tags = db.relationship("Tag",
@@ -136,9 +131,9 @@ class Organization(db.Model):
     # relationships
     events = db.relationship("Event", backref="host", lazy=True)
 
-    followers = db.relationship("Follow",
-                                back_populates="organization",
-                                cascade="all, delete-orphan"
+    followers = db.relationship("User",
+                                secondary=a_follow,
+                                back_populates="following",
                                 )
     
     tags = db.relationship("Tag",

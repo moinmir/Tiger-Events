@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import login_user, current_user, login_required
 from tigerevents import db
-from tigerevents.models import Organization, User
+from tigerevents.models import Organization, User, a_follow
 
 organizations = Blueprint("organizations", __name__)
 
@@ -9,8 +9,7 @@ organizations = Blueprint("organizations", __name__)
 @login_required
 def org_page():
     # organizations followed by the user
-    myorgs = [assoc.organization for assoc in current_user.following]
-    # Organization.query.join(a_follow).join(User).filter(a_follow.c.user_id == current_user.id).all()
+    myorgs = Organization.query.join(a_follow).join(User).filter(a_follow.c.user_id == current_user.id).all()
 
     # organizations not followed by the user
     unorgs = Organization.query.all()

@@ -1,5 +1,5 @@
 from tigerevents import db
-from tigerevents.models import User, Event, Saved, Organization, Tag, Follow
+from tigerevents.models import User, Event, Saved, Organization, Tag
 
 db.drop_all()
 db.create_all()
@@ -113,54 +113,9 @@ def create_sample_db():
     # user1: F = [2,3]
     # user2: F = [1,4]
     # user3: F = [1,2,3,4]
-    follow12 = Follow()
-    follow12.organization =  org2
-    follow12.user = user1
-    db.session.add(follow12)
-    db.session.commit()
-    
-    follow13 = Follow()
-    follow13.organization =  org3  
-    follow13.user = user1
-    db.session.add(follow13)
-    db.session.commit()
-
-    # user2: F = [1,4]
-    follow21 =  Follow()
-    follow21.organization = org1
-    follow21.user = user2
-    db.session.add(follow21)
-    db.session.commit()
-
-    follow24 = Follow()
-    follow24.organization = org4
-    follow24.user = user2
-    db.session.add(follow24)
-    db.session.commit()
-
-    # user3: F = [1,2,3,4]
-    follow31 = Follow()
-    follow31.organization = org1
-    follow31.user = user3
-    db.session.add(follow31)
-    db.session.commit()
-
-    follow32 = Follow()
-    follow32.organization = org2
-    follow32.user = user3
-    db.session.add(follow32)
-    db.session.commit()
-
-    follow33 = Follow()
-    follow33.organization = org3
-    follow33.user = user3
-    db.session.add(follow33)
-    db.session.commit()
-
-    follow34 = Follow()
-    follow34.organization = org4
-    follow34.user = user3
-    db.session.add(follow34)
+    user1.following.extend((org2, org3))
+    user2.following.extend((org1, org4))
+    user3.following.extend((org1, org2, org3, org4))
     db.session.commit()
 
 
