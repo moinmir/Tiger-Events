@@ -47,7 +47,8 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        # and bcrypt.check_password_hash(user.password, form.password.data)
+        if user:
             login_user(user, remember=form.remember.data)
             next_page = request.args.get("next")
             return (
@@ -64,12 +65,12 @@ def login():
 @users.route("/myevents", methods=["GET", "POST"])
 @login_required
 def myevents():
-    events = Event.query
-    return render_template(
-        "myevents.html", title="My Events", events=events
-    )
+    # organizations followed by the user
+    myevents = current_user.events
+    
+    return render_template("myevents.html", title="My Events", myevents=myevents)
 
-
+    
 @users.route("/logout")
 def logout():
     logout_user()

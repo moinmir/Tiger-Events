@@ -22,11 +22,11 @@ login_manager.login_message_category = "info"
 from tigerevents.users.routes import users
 from tigerevents.events.routes import events
 from tigerevents.main.routes import main
-# from tigerevents.organizations.routes import organizations
+from tigerevents.organizations.routes import organizations
 
 app.register_blueprint(users)
 app.register_blueprint(events)
 app.register_blueprint(main)
-# app.register_blueprint(organizations)
+app.register_blueprint(organizations)
 
 

@@ -1,3 +1,21 @@
-{% extends "layout.html" %} {% block content %}
-<h1>Organizations</h1>
+{% extends "layout.html" %}
+{% block content %}
+<h1 style="color:rgb(2, 2, 0)">Organizations</h1>
+<style>
+    body {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<h2>All Organizations</h2>
+{% for org in myorgs %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <div class="media-body">
+        <h2>{{ org.name }}</h2>
+        <p class="article-content">{{ org.description }}</p>
+    </div>
+</article>
+{% endfor %} 
 {% endblock content %}

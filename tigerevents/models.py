@@ -2,6 +2,7 @@ from datetime import datetime
 from tigerevents import db, login_manager
 from flask_login import UserMixin
 
+
 # get user object
 @login_manager.user_loader
 def load_user(user_id):
@@ -23,10 +24,15 @@ class Saved(db.Model):
     event = db.relationship("Event", back_populates="participants" )
     user = db.relationship("User", back_populates="events")
 
-a_follow = db.Table("follow",
-                    db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
-                    db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'))
-                   )
+class Follow(db.Model):
+    __tablename__ = 'a_follow'
+
+    # foreign keys
+    user_id = db.Column(db.Integer, db.ForeignKey('nice_user.id'), primary_key=True)
+    org_id = db.Column(db.Integer, db.ForeignKey('nice_organization.id'), primary_key=True)
+
+    organization = db.relationship("Organization", back_populates="followers" )
+    user = db.relationship("User", back_populates="following")
 
 a_org_tags = db.Table("org_tags",
                       db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id')),
@@ -63,9 +69,9 @@ class User(db.Model, UserMixin):
                              cascade="all, delete-orphan")
 
     # association table
-    following = db.relationship("Organization",
-                                secondary=a_follow,
-                                back_populates="followers",
+    following = db.relationship("Follow",
+                                back_populates="user",
+                                cascade="all, delete-orphan"
                                )
 
     tags = db.relationship("Tag",
@@ -75,6 +81,19 @@ class User(db.Model, UserMixin):
     # functions/methods
     def __repr__(self):
         return f"User('{self.email}')"
+    
+    def follow(self, org):
+        if not org in self.following:
+            self.following.append(org)
+            return self
+    
+    def unfollow(self, org):
+        if org in self.following:
+            self.following.remove(org)
+            return self
+    
+    
+        
 ###############################################################################
 
 class Event(db.Model):
@@ -101,6 +120,7 @@ class Event(db.Model):
     # functions/methods
     def __repr__(self):
         return f"Event('{self.title}', '{self.date_posted}')"
+
 ###############################################################################
 
 class Organization(db.Model):
@@ -116,9 +136,9 @@ class Organization(db.Model):
     # relationships
     events = db.relationship("Event", backref="host", lazy=True)
 
-    followers = db.relationship("User",
-                                secondary=a_follow,
-                                back_populates="following",
+    followers = db.relationship("Follow",
+                                back_populates="organization",
+                                cascade="all, delete-orphan"
                                 )
     
     tags = db.relationship("Tag",

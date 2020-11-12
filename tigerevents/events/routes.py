@@ -6,6 +6,7 @@ from tigerevents.models import Event
 events = Blueprint("events", __name__)
 
 @events.route("/event/<int:event_id>")
-def event(campaign_id):
+def event(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template("event.html", title=event.title, event=event)
+

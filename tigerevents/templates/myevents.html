@@ -1,3 +1,22 @@
-{% extends "layout.html" %} {% block content %}
-<h1>MyEvents</h1>
+{% extends "layout.html" %}
+{% block content %}
+<h1 style="color:rgb(2, 2, 0)">My Events</h1>
+<style>
+    body {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<h2>Saved</h2>
+{% for assoc in myevents %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <small class="text-muted">{{ assoc.going }}</small>
+    <div class="media-body">
+        <h2>{{ assoc.event.title }}</h2>
+        <p class="article-content">{{ assoc.event.description }}</p>
+    </div>
+</article>
+{% endfor %} 
 {% endblock content %}
