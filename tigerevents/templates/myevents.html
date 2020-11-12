@@ -8,15 +8,38 @@
         background-size: 100% 100%;
     }
 </style>
-<h2>Saved</h2>
-{% for assoc in myevents %}
+<h2>Going</h2>
+{% for assoc in events %}
+{% if assoc.going %}
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <small class="text-muted">{{ assoc.going }}</small>
     <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
+            </div>
+        </div>
         <h2>{{ assoc.event.title }}</h2>
         <p class="article-content">{{ assoc.event.description }}</p>
     </div>
 </article>
+{% endif %}
+{% endfor %} 
+<h2>Saved</h2>
+{% for assoc in events %}
+{% if not assoc.going %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
+            </div>
+        </div>
+        <h2>{{ assoc.event.title }}</h2>
+        <p class="article-content">{{ assoc.event.description }}</p>
+    </div>
+</article>
+{% endif %}
 {% endfor %} 
 {% endblock content %}

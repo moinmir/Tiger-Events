@@ -9,10 +9,30 @@
     }
 </style>
 <h2>All Organizations</h2>
+{% for org in unorgs %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('organizations.follow', org_id=org.id) }}">Follow</a>
+            </div>
+        </div>
+        <h2>{{ org.name }}</h2>
+        <p class="article-content">{{ org.description }}</p>
+    </div>
+</article>
+{% endfor %} 
+<h2>My Organizations</h2>
 {% for org in myorgs %}
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
     <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('organizations.unfollow', org_id=org.id) }}">Unfollow</a>
+            </div>
+        </div>
         <h2>{{ org.name }}</h2>
         <p class="article-content">{{ org.description }}</p>
     </div>

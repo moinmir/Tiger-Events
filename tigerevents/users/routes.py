@@ -66,9 +66,9 @@ def login():
 @login_required
 def myevents():
     # organizations followed by the user
-    myevents = current_user.events
+    events = current_user.events
     
-    return render_template("myevents.html", title="My Events", myevents=myevents)
+    return render_template("myevents.html", title="My Events", events=events)
 
     
 @users.route("/logout")

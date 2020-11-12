@@ -12,6 +12,12 @@
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
     <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
+            </div>
+        </div>
         <h2><a class="article-title"
                 href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
         <p class="article-content">{{ event.description }}</p>
