@@ -87,6 +87,16 @@ class User(db.Model, UserMixin):
             self.following.remove(org)
             return self
     
+    def is_going(self, event):
+        if self.is_saved(event):
+            return Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id)[0].going
+        else:
+            return False
+
+
+    def is_saved(self, event):
+        return len(Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id).all()) > 0
+    
     
         
 ###############################################################################
@@ -115,6 +125,8 @@ class Event(db.Model):
     # functions/methods
     def __repr__(self):
         return f"Event('{self.title}', '{self.date_posted}')"
+
+
 
 ###############################################################################
 

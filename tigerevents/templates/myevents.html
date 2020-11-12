@@ -34,6 +34,7 @@
         <div class="article-metadata">
             <div>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
             </div>
         </div>
         <h2>{{ assoc.event.title }}</h2>

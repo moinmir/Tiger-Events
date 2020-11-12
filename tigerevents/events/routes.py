@@ -22,6 +22,12 @@ def save(event_id):
             category="danger"
         )
         return redirect(url_for("main.home"))
+    elif current_user.is_saved(event):
+        flash(
+            message="Already saved.", 
+            category="danger"
+        )
+        return redirect(url_for("main.home"))
 
     save1 = Saved(going=False)
     save1.event = event
@@ -48,6 +54,22 @@ def rsvp(event_id):
             category="danger"
         )
         return redirect(url_for("main.home"))
+    
+    elif current_user.is_going(event):
+        flash(
+            message="Event already added.", 
+            category="danger"
+        )
+        return redirect(url_for("users.myevents"))
+    
+    elif current_user.is_saved(event):
+        Saved.query.filter_by(event_id = event_id).filter_by(user_id = current_user.id)[0].going = True
+        db.session.commit()
+        flash(
+            message="Event added to calendar.", 
+            category="danger"
+        )
+        return redirect(url_for("users.myevents"))
 
     save1 = Saved(going=True)
     save1.event = event

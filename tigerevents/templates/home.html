@@ -9,6 +9,7 @@
     }
 </style>
 {% for event in events.items %}
+{% if event not in myevents %}
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
     <div class="media-body">
@@ -23,5 +24,6 @@
         <p class="article-content">{{ event.description }}</p>
     </div>
 </article>
+{% endif %}
 {% endfor %} 
 {% endblock content %}

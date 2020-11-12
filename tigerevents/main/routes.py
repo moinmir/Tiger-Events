@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint
-from tigerevents.models import Event
+from tigerevents.models import Event, Saved
 from flask_login import login_user, current_user, login_required
 
 
@@ -11,8 +11,9 @@ main = Blueprint('main', __name__)
 def home():
     page = request.args.get("page", 1, type=int)
     events = Event.query.order_by(Event.date_posted.desc()).paginate(per_page=5, page=page)
-    #events = [x for x in events.items if x not in current_user.events]
-    return render_template("home.html", events=events, title="Home")
+    myevents = [assoc.event for assoc in current_user.events]
+    # [assoc.event for assoc in Saved.query.filter_by(user_id = current_user.id).all()]
+    return render_template("home.html", events=events, myevents=myevents,  title="Home")
 
 
 @main.route("/about") 
