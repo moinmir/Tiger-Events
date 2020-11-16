@@ -109,6 +109,8 @@ class Event(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     description = db.Column(db.Text, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default="default_campaign.jpg")
+    location = db.Column(db.String(120), nullable=True)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
     # relationships
     # association object

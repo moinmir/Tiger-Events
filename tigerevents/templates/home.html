@@ -18,6 +18,11 @@
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
             </div>
+            <div>
+                <p>Date: {{event.date.strftime("%a, %m/%d/%Y")}}</p>
+                <p>Time: {{event.date.strftime("%I:%M%p")}}</p>
+                <p>Location: {{event.location}}</p>
+            </div>
         </div>
         <h2><a class="article-title"
                 href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>

@@ -18,6 +18,11 @@
             <div>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
             </div>
+            <div>
+                <p>Date: {{assoc.event.date.strftime("%a, %m/%d/%Y")}}</p>
+                <p>Time: {{assoc.event.date.strftime("%I:%M%p")}}</p>
+                <p>Location: {{assoc.event.location}}</p>
+            </div>
         </div>
         <h2>{{ assoc.event.title }}</h2>
         <p class="article-content">{{ assoc.event.description }}</p>
@@ -35,6 +40,11 @@
             <div>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
+            </div>
+            <div>
+                <p>Date: {{assoc.event.date.strftime("%a, %m/%d/%Y")}}</p>
+                <p>Time: {{assoc.event.date.strftime("%I:%M%p")}}</p>
+                <p>Location: {{assoc.event.location}}</p>
             </div>
         </div>
         <h2>{{ assoc.event.title }}</h2>
