@@ -1,4 +1,4 @@
-from tigerevents import db
+from tigerevents import db, bcrypt
 from tigerevents.models import User, Event, Saved, Organization, Tag
 from datetime import datetime
 
@@ -6,9 +6,12 @@ db.drop_all()
 db.create_all()
 
 # dummy users
-user1 = User(name="Moin", email="moin@princeton.edu", password="moin_events")
-user2 = User(name="Faisal", email="ffakhro@princeton.edu", password="faisal_events")
-user3 = User(name="Michael", email="maf6@princeton.edu", password="michael_events")
+pass1 = bcrypt.generate_password_hash("moin_events").decode("utf-8")
+pass2 = bcrypt.generate_password_hash("faisal_events").decode("utf-8")
+pass3 = bcrypt.generate_password_hash("michael_events").decode("utf-8")
+user1 = User(name="Moin", email="moin@princeton.edu", password=pass1)
+user2 = User(name="Faisal", email="ffakhro@princeton.edu", password=pass2)
+user3 = User(name="Michael", email="maf6@princeton.edu", password=pass3)
 db.session.add(user1)
 db.session.add(user2)
 db.session.add(user3)
