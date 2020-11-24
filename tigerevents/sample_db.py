@@ -39,7 +39,7 @@ event2 = Event(title="Whit Study Break", description="Enjoy sushi with Insiya",
                host=org3)
 event3 = Event(title="Robotics Club Meetup", description="Introduction to the robotics club", 
                location="Studio Lab, Fine Hall",
-               start_date=datetime(2020, 11, 25, 16), end_date = datetime(2020, 11, 25, 19),
+               start_date=datetime(2020, 12, 25, 11), end_date = datetime(2020, 12, 25, 12),
                host=org2)
 event4 = Event(title="Discussing the 2020 Election", description="Discuss the elction with the panel", 
                location="A12, Clio Hall",
@@ -47,7 +47,7 @@ event4 = Event(title="Discussing the 2020 Election", description="Discuss the el
                host=org4)
 event5 = Event(title="Free Stuff", description="T-Shirts and Ice Cream", 
                location="Whitman Common Room",
-               start_date=datetime(2020, 11, 18, 20), end_date = datetime(2020, 11, 18, 22),
+               start_date=datetime(2020, 11, 28, 14, 30), end_date = datetime(2020, 11, 28, 16),
                host=org3)  
                  
 db.session.add(event1)

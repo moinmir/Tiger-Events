@@ -96,8 +96,16 @@ class User(db.Model, UserMixin):
 
     def is_saved(self, event):
         return len(Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id).all()) > 0
-    
-    
+
+    def clash(self, event):
+        events = [assoc.event for assoc in Saved.query.filter_by(user_id = self.id).filter_by(going = True).all()]
+
+        for myevent in events:
+            if myevent.event_clash(event):
+                return True
+        
+        return False
+
         
 ###############################################################################
 
@@ -128,6 +136,25 @@ class Event(db.Model):
     # functions/methods
     def __repr__(self):
         return f"Event('{self.title}', '{self.date_posted}')"
+
+    def event_clash(self, event):
+        start1, end1 = self.start_date, self.end_date
+        start2, end2 = event.start_date, event.end_date
+
+        # start or end at the same time
+        if ((start1 == start2) or (end1 == end2)):
+            return True
+
+        # does one event begin before the other ends
+        if(start1 < start2):
+            if (start2 < end1):
+                return True
+        else:
+            if (start1 < end2):
+                return True
+
+        return False 
+
 
 
 

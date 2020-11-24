@@ -28,6 +28,12 @@ def save(event_id):
             category="danger"
         )
         return redirect(url_for("main.home"))
+    
+    elif current_user.clash(event):
+        flash(
+            message="Clashes with an event in your calendar.", 
+            category="danger"
+        )
 
     save1 = Saved(going=False)
     save1.event = event
@@ -61,13 +67,20 @@ def rsvp(event_id):
             category="danger"
         )
         return redirect(url_for("users.myevents"))
-    
+
+    elif current_user.clash(event):
+        flash(
+            message="Clashes with an event in your calendar.", 
+            category="danger"
+        )
+        return redirect(url_for("users.myevents"))
+
     elif current_user.is_saved(event):
         Saved.query.filter_by(event_id = event_id).filter_by(user_id = current_user.id)[0].going = True
         db.session.commit()
         flash(
             message="Event added to calendar.", 
-            category="danger"
+            category="success"
         )
         return redirect(url_for("users.myevents"))
 
