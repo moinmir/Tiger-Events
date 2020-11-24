@@ -7,9 +7,10 @@ import os
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhost:5432/EventsDB"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SECRET_KEY'] = "7501d06b12422d9792968f951c600b32"
-#DATABASE_URI = 'postgres+psycopg2://postgres:password@localhost:5432/EventsDB'
 
 # Initialize the extensions
 db = SQLAlchemy(app)
