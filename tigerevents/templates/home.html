@@ -1,13 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1 style="color:rgb(2, 2, 0)">Events</h1>
-<style>
-    body {
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: 100% 100%;
-    }
-</style>
+<div class="row my-3">
+    <div class="col">
+        <div style="text-align:center">
+            <h1>Events</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <div style="text-align:center">
+            <h1>Search for Events</h1>
+        </div>
+    </div>
+</div>
+
+<div class = "row mb-5">
+    <div class="col">
+        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+    </div>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <div style="text-align:center">
+            <h1>Organizations I'm Follwing</h1>
+        </div>
+    </div>
+</div>
+
 {% for event in events.items %}
 {% if event not in myevents %}
 <article class="media content-section">
