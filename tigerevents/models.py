@@ -1,6 +1,7 @@
 from datetime import datetime
 from tigerevents import db, login_manager
 from flask_login import UserMixin
+import uuid
 
 
 # get user object
@@ -56,6 +57,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    ical_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
 
     # relationships - all many to many
     # association object
@@ -93,6 +95,9 @@ class User(db.Model, UserMixin):
         else:
             return False
 
+    def going_to(self):
+        return [assoc.event for assoc in Saved.query.filter_by(user_id = self.id).filter_by(going = True).all()]
+    
 
     def is_saved(self, event):
         return len(Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id).all()) > 0

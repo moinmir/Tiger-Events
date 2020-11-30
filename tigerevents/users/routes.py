@@ -17,6 +17,7 @@ from tigerevents.users.forms import (
     ResetPasswordForm,
 )
 from tigerevents.users.cal import create_ical, save_ical
+import uuid
 
 users = Blueprint("users", __name__)
 
@@ -81,14 +82,16 @@ def logout():
 
 @users.route("/myevents/ical", methods=["GET", "POST"])
 @login_required
-def ical():
-    events = [assoc.event for assoc in Saved.query.filter_by(user_id = current_user.id).filter_by(going = True).all()]
+def download_ical():
+    events = current_user.going_to()
     cal = create_ical(events)
-    ical_fn = save_ical(cal)
+    ical_fn = save_ical(current_user, cal)
     try:
         return send_from_directory(app.config["USER_CAL"], filename=ical_fn, as_attachment=True)
     except FileNotFoundError:
         abort(404)
+
+
     
 
    

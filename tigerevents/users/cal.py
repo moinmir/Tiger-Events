@@ -1,6 +1,5 @@
 from ics import Calendar, Event
 import os
-import secrets
 from flask import current_app
 
 # create ical file for one user
@@ -18,9 +17,8 @@ def create_ical(events):
     return c
 
 
-def save_ical(cal):
-    random_hex = secrets.token_hex(8)
-    ical_fn = random_hex + '.ics'
+def save_ical(user, cal):
+    ical_fn =  user.ical_uuid + '.ics'
     ical_path = os.path.join(current_app.root_path, "static/ical", ical_fn)
 
     with open(ical_path, 'w') as my_file:
