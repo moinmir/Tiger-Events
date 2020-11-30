@@ -1,16 +1,24 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import (
+    render_template, 
+    url_for, 
+    flash, 
+    redirect, 
+    request, 
+    Blueprint,
+    send_file, send_from_directory, safe_join, abort,
+)
 from flask_login import login_user, current_user, logout_user, login_required
-from tigerevents import db, bcrypt
-from tigerevents.models import User, Event
+from tigerevents import db, bcrypt, app
+from tigerevents.models import User, Event, Saved
 from tigerevents.users.forms import (
     RegistrationForm,
     LoginForm,
     RequestResetForm,
     ResetPasswordForm,
 )
+from tigerevents.users.cal import create_ical, save_ical
 
 users = Blueprint("users", __name__)
-
 
 @users.route("/register", methods=["GET", "POST"])
 def register():
@@ -59,7 +67,7 @@ def login():
 @users.route("/myevents", methods=["GET", "POST"])
 @login_required
 def myevents():
-    # organizations followed by the user
+    # events followed by user
     events = current_user.events
     
     return render_template("myevents.html", title="My Events", events=events)
@@ -71,4 +79,16 @@ def logout():
     return redirect(url_for("main.home"))
 
 
+@users.route("/myevents/ical", methods=["GET", "POST"])
+@login_required
+def ical():
+    events = [assoc.event for assoc in Saved.query.filter_by(user_id = current_user.id).filter_by(going = True).all()]
+    cal = create_ical(events)
+    ical_fn = save_ical(cal)
+    try:
+        return send_from_directory(app.config["USER_CAL"], filename=ical_fn, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+    
 
+   
