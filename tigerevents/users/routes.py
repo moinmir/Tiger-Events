@@ -6,9 +6,10 @@ from flask import (
     request, 
     Blueprint,
     send_file, send_from_directory, safe_join, abort,
+    current_app,
 )
 from flask_login import login_user, current_user, logout_user, login_required
-from tigerevents import db, bcrypt, app
+from tigerevents import db, bcrypt
 from tigerevents.models import User, Event, Saved
 from tigerevents.users.forms import (
     RegistrationForm,
@@ -80,18 +81,22 @@ def logout():
     return redirect(url_for("main.home"))
 
 
-@users.route("/myevents/ical", methods=["GET", "POST"])
+@users.route("/myevents/ical/<uuid:ical_uuid>", methods=["GET", "POST"])
 @login_required
-def download_ical():
+def download_ical(ical_uuid):
     events = current_user.going_to()
     cal = create_ical(events)
     ical_fn = save_ical(current_user, cal)
     try:
-        return send_from_directory(app.config["USER_CAL"], filename=ical_fn, as_attachment=True)
+        return send_from_directory(current_app.config["USER_CAL"], filename=ical_fn, as_attachment=True)
     except FileNotFoundError:
         abort(404)
 
-
+# @users.route("/myevents/ical", methods=["GET", "POST"])
+# @login_required
+# def get_ical_link():
+#     link = current_user.ical_uuid.hex + '.ics'
+    
     
 
    
