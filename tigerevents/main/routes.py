@@ -15,6 +15,9 @@ def home():
     # [assoc.event for assoc in Saved.query.filter_by(user_id = current_user.id).all()]
     return render_template("home.html", events=events, myevents=myevents,  title="Home")
 
+@main.route("/search")
+def search():
+    return render_template("search.html")
 
 @main.route("/about") 
 def about():
