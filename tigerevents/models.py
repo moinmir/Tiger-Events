@@ -1,7 +1,9 @@
 from datetime import datetime
 from tigerevents import db, login_manager
 from flask_login import UserMixin
+from sqlalchemy.dialects.postgresql import UUID
 import uuid
+
 
 
 # get user object

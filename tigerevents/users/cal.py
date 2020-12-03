@@ -18,7 +18,7 @@ def create_ical(events):
 
 
 def save_ical(user, cal):
-    ical_fn =  user.ical_uuid + '.ics'
+    ical_fn =  user.ical_uuid.hex + '.ics'
     ical_path = os.path.join(current_app.root_path, "static/ical", ical_fn)
 
     with open(ical_path, 'w') as my_file:
