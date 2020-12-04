@@ -19,6 +19,7 @@ from tigerevents.users.forms import (
 )
 from tigerevents.users.cal import create_ical, save_ical
 import uuid
+import os
 
 users = Blueprint("users", __name__)
 
@@ -72,7 +73,7 @@ def myevents():
     # events followed by user
     events = current_user.events
     
-    return render_template("myevents.html", title="My Events", events=events)
+    return render_template("myevents.html", title="My Events", events=events, link=current_user.get_link())
 
     
 @users.route("/logout")
@@ -87,15 +88,13 @@ def download_ical(ical_uuid):
     events = current_user.going_to()
     cal = create_ical(events)
     ical_fn = save_ical(current_user, cal)
+    ical_path = os.path.join(current_app.root_path, "static/ical")
     try:
-        return send_from_directory(current_app.config["USER_CAL"], filename=ical_fn, as_attachment=True)
+        return send_from_directory(ical_path, filename=ical_fn, as_attachment=True)
     except FileNotFoundError:
         abort(404)
 
-# @users.route("/myevents/ical", methods=["GET", "POST"])
-# @login_required
-# def get_ical_link():
-#     link = current_user.ical_uuid.hex + '.ics'
+
     
     
 

@@ -3,8 +3,8 @@ from tigerevents import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-
-
+from flask import current_app
+import os
 
 # get user object
 @login_manager.user_loader
@@ -112,6 +112,10 @@ class User(db.Model, UserMixin):
                 return True
         
         return False
+    
+    def get_link(self):
+        return os.path.join("tigerevents.herokuapp.com", self.ical_uuid.hex + ".ics")
+
 
         
 ###############################################################################

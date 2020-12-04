@@ -8,6 +8,7 @@
         background-size: 100% 100%;
     }
 </style>
+<h4>Use this URL to see this schedule on your Calendar: {{link}}</h4>
 <h2>Going</h2>
 {% for assoc in events %}
 {% if assoc.going %}
@@ -16,11 +17,13 @@
     <div class="media-body">
         <div class="article-metadata">
             <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
             </div>
             <div>
                 <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}</p>
+                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
+                </p>
                 <p>Location: {{assoc.event.location}}</p>
             </div>
         </div>
@@ -29,7 +32,7 @@
     </div>
 </article>
 {% endif %}
-{% endfor %} 
+{% endfor %}
 <h2>Saved</h2>
 {% for assoc in events %}
 {% if not assoc.going %}
@@ -38,12 +41,15 @@
     <div class="media-body">
         <div class="article-metadata">
             <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
             </div>
             <div>
                 <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}</p>
+                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
+                </p>
                 <p>Location: {{assoc.event.location}}</p>
             </div>
         </div>
@@ -52,5 +58,5 @@
     </div>
 </article>
 {% endif %}
-{% endfor %} 
+{% endfor %}
 {% endblock content %}
