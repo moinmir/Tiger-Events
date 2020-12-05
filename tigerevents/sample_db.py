@@ -3,6 +3,7 @@ from tigerevents.models import User, Event, Saved, Organization, Tag
 from datetime import datetime
 
 db.drop_all()
+db.configure_mappers()
 db.create_all()
 
 # dummy users

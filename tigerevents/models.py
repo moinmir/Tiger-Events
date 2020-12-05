@@ -1,3 +1,6 @@
+from flask_sqlalchemy import BaseQuery
+from sqlalchemy_searchable import SearchQueryMixin
+from sqlalchemy_utils.types import TSVectorType
 from datetime import datetime
 from tigerevents import db, login_manager
 from flask_login import UserMixin
@@ -109,6 +112,9 @@ class User(db.Model, UserMixin):
         
 ###############################################################################
 
+class EventQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 class Event(db.Model):
     __tablename__='nice_event'
     # attributes
@@ -120,6 +126,7 @@ class Event(db.Model):
     location = db.Column(db.String(120), nullable=True)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
+    search_vector = db.Column(TSVectorType('title','description'))
     
     # relationships
     # association object

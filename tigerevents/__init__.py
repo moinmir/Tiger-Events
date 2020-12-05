@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = "7501d06b12422d9792968f951c600b32"
 
 # Initialize the extensions
 db = SQLAlchemy(app)
-make_searchable()
+make_searchable(self.Base.metadata)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 

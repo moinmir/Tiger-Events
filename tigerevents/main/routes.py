@@ -17,6 +17,7 @@ def home():
 
 @main.route("/search")
 def search():
+    print(Event.query.search('Study').limit(5).all)
     return render_template("search.html")
 
 @main.route("/about") 
