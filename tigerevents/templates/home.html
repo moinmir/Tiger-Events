@@ -16,29 +16,30 @@
     </div>
 </div>
 
-<div class = "row mb-5">
+<div class="row mb-5">
     <div class="col">
-        <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+        <input type="text" class="form-control" placeholder="Search..." aria-label="Search"
+            aria-describedby="basic-addon1">
     </div>
 </div>
 
 <div class="row my-3">
     <div class="col">
         <div style="text-align:center">
-            <h1>Organizations I'm Follwing</h1>
+            <h1>From Organizations You Follow</h1>
         </div>
     </div>
 </div>
-
-{% for event in events.items %}
-{% if event not in myevents %}
+{% for event in org_events %}
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
     <div class="media-body">
         <div class="article-metadata">
             <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
+                    to Calendar</a>
             </div>
             <div>
                 <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
@@ -46,11 +47,40 @@
                 <p>Location: {{event.location}}</p>
             </div>
         </div>
-        <h2><a class="article-title"
-                href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
+        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
         <p class="article-content">{{ event.description }}</p>
     </div>
 </article>
-{% endif %}
-{% endfor %} 
+{% endfor %}
+
+<div class="row my-3">
+    <div class="col">
+        <div style="text-align:center">
+            <h1>All Other Events</h1>
+        </div>
+    </div>
+</div>
+
+{% for event in events%}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+    <div class="media-body">
+        <div class="article-metadata">
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
+                    to Calendar</a>
+            </div>
+            <div>
+                <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
+                <p>Time: {{event.start_date.strftime("%I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</p>
+                <p>Location: {{event.location}}</p>
+            </div>
+        </div>
+        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
+        <p class="article-content">{{ event.description }}</p>
+    </div>
+</article>
+{% endfor %}
 {% endblock content %}

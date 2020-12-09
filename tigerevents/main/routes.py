@@ -9,11 +9,13 @@ main = Blueprint('main', __name__)
 @main.route("/home")
 @login_required
 def home():
-    page = request.args.get("page", 1, type=int)
-    events = Event.query.order_by(Event.date_posted.desc()).paginate(per_page=5, page=page)
-    myevents = [assoc.event for assoc in current_user.events]
-    # [assoc.event for assoc in Saved.query.filter_by(user_id = current_user.id).all()]
-    return render_template("home.html", events=events, myevents=myevents,  title="Home")
+    myevents = current_user.going_to()
+    org_events = current_user.org_events()
+    all_events = Event.query.all()
+    events = [event for event in all_events if event not in myevents]
+    org_events = [event for event in org_events if event not in myevents]
+    events = [event for event in events if event not in org_events]
+    return render_template("home.html", events=events, org_events=org_events, title="Home")
 
 @main.route("/search")
 def search():
