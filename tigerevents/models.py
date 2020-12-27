@@ -4,7 +4,10 @@ from sqlalchemy_utils.types import TSVectorType
 from datetime import datetime
 from tigerevents import db, login_manager
 from flask_login import UserMixin
-
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
+from flask import current_app
+import os
 
 # get user object
 @login_manager.user_loader
@@ -59,6 +62,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    ical_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
 
     # relationships - all many to many
     # association object
@@ -96,6 +100,9 @@ class User(db.Model, UserMixin):
         else:
             return False
 
+    def going_to(self):
+        return [assoc.event for assoc in Saved.query.filter_by(user_id = self.id).filter_by(going = True).all()]
+    
 
     def is_saved(self, event):
         return len(Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id).all()) > 0
@@ -108,6 +115,10 @@ class User(db.Model, UserMixin):
                 return True
         
         return False
+    
+    def get_link(self):
+        return os.path.join("tigerevents.herokuapp.com", self.ical_uuid.hex + ".ics")
+
 
         
 ###############################################################################

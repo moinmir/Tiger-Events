@@ -142,3 +142,5 @@ cython_debug/
 # Db objects
 site.db
 site.db-journal
+
+.flaskenv

@@ -15,14 +15,15 @@
     <div class="media-body">
         <div class="article-metadata">
             <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('organizations.follow', org_id=org.id) }}">Follow</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('organizations.follow', org_id=org.id) }}">Follow</a>
             </div>
         </div>
         <h2>{{ org.name }}</h2>
         <p class="article-content">{{ org.description }}</p>
     </div>
 </article>
-{% endfor %} 
+{% endfor %}
 <h2>My Organizations</h2>
 {% for org in myorgs %}
 <article class="media content-section">
@@ -30,12 +31,13 @@
     <div class="media-body">
         <div class="article-metadata">
             <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('organizations.unfollow', org_id=org.id) }}">Unfollow</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                    href="{{ url_for('organizations.unfollow', org_id=org.id) }}">Unfollow</a>
             </div>
         </div>
         <h2>{{ org.name }}</h2>
         <p class="article-content">{{ org.description }}</p>
     </div>
 </article>
-{% endfor %} 
+{% endfor %}
 {% endblock content %}

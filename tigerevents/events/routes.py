@@ -120,4 +120,5 @@ def remove(event_id):
     )
 
     return redirect(url_for("users.myevents"))
+
     
