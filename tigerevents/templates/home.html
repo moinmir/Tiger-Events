@@ -18,8 +18,9 @@
 
 <div class="row mb-5">
     <div class="col">
-        <input type="text" class="form-control" placeholder="Search..." aria-label="Search"
-            aria-describedby="basic-addon1">
+        <form method="GET" action="{{ url_for('main.search') }}">
+            {{ form.searchq(class="form-control form-control-lg") }}
+        </form>
     </div>
 </div>
 

@@ -1,7 +1,8 @@
 from flask import render_template, request, Blueprint
 from tigerevents.models import Event, Saved
 from flask_login import login_user, current_user, login_required
-
+from tigerevents import db
+from tigerevents.main.forms import SearchForm
 
 main = Blueprint('main', __name__)
 
@@ -15,12 +16,19 @@ def home():
     events = [event for event in all_events if event not in myevents]
     org_events = [event for event in org_events if event not in myevents]
     events = [event for event in events if event not in org_events]
-    return render_template("home.html", events=events, org_events=org_events, title="Home")
+
+    form = SearchForm()
+
+    return render_template("home.html", events=events, org_events=org_events, title="Home", form=form)
 
 @main.route("/search")
 def search():
-    print(Event.query.search('Study').limit(5).all)
-    return render_template("search.html")
+    searchq = request.args.get('searchq')
+    events = Event.query.filter(Event.title.ilike('%' + searchq + '%')).all()
+    
+    form = SearchForm()
+    
+    return render_template("search.html", events=events, form=form)
 
 @main.route("/about") 
 def about():

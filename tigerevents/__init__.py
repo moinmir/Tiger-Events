@@ -22,16 +22,17 @@ def create_app(config_class=Config):
     bcrypt.init_app(app)
     login_manager.init_app(app)
 
-    from tigerevents.users.routes import users
-    from tigerevents.events.routes import events
-    from tigerevents.main.routes import main
-    from tigerevents.organizations.routes import organizations
+    with app.app_context():
+        from tigerevents.users.routes import users
+        from tigerevents.events.routes import events
+        from tigerevents.main.routes import main
+        from tigerevents.organizations.routes import organizations
 
-    app.register_blueprint(users)
-    app.register_blueprint(events)
-    app.register_blueprint(main)
-    app.register_blueprint(organizations)
+        app.register_blueprint(users)
+        app.register_blueprint(events)
+        app.register_blueprint(main)
+        app.register_blueprint(organizations)
 
-    return app
+        return app
 
 
