@@ -119,6 +119,14 @@ class User(db.Model, UserMixin):
     def get_link(self):
         return os.path.join("tigerevents.herokuapp.com", self.ical_uuid.hex + ".ics")
 
+    def org_events(self):
+        events = []
+        for org in self.following:
+            events.extend(org.events)
+        return events
+
+
+
 
         
 ###############################################################################
