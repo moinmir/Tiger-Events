@@ -25,6 +25,8 @@ def home():
 def search():
     searchq = request.args.get('searchq')
     events = Event.query.filter(Event.title.ilike('%' + searchq + '%')).all()
+    events.extend(Event.query.filter(Event.description.ilike('%' + searchq + '%')).all())
+    events.extend(Event.query.filter(Event.location.ilike('%' + searchq + '%')).all())
     
     form = SearchForm()
     

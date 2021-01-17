@@ -145,7 +145,7 @@ class Event(db.Model):
     location = db.Column(db.String(120), nullable=True)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    search_vector = db.Column(TSVectorType('title','description'))
+    search_vector = db.Column(TSVectorType('title','description','location'))
     
     # relationships
     # association object
