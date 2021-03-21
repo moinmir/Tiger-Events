@@ -63,6 +63,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     ical_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
+    urole = db.Column(db.String(60), nullable=False)
 
     # relationships - all many to many
     # association object
@@ -124,6 +125,12 @@ class User(db.Model, UserMixin):
         for org in self.following:
             events.extend(org.events)
         return events
+    
+    def host_of(self):
+        if self.urole == "Host":
+            return self.following[0]
+        else:
+            return None
 
 
 
