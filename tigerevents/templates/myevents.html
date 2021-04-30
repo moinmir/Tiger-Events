@@ -21,6 +21,7 @@
                     href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
             </div>
             <div>
+                <p>Organized by: {{event.host.name}}</p>
                 <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
                 <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
                 </p>
@@ -47,6 +48,7 @@
                     href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
             </div>
             <div>
+                <p>Organized by: {{event.host.name}}</p>
                 <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
                 <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
                 </p>
