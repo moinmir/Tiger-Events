@@ -4,15 +4,14 @@
 
 ### Start postgres service
 
-```
-sudo service postgresql start
+
+```sudo service postgresql start
 sudo -u postgres psql
 ```
 
 ### Populate database
 
-```
-flask shell
+```flask shell
 from tigerevents import sample_db()
 ```
 
