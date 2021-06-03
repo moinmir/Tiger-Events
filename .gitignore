@@ -144,3 +144,4 @@ site.db
 site.db-journal
 
 .flaskenv
+.envrc
