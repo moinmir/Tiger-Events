@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6 { font-family: Times, 'Times New Roman', serif;
     font-weight: 500;
 }
 
-.content-section {
+.card {
     background: #ffffff;
     padding: 10px 20px;
     border: 1px solid #dddddd;
@@ -31,16 +31,16 @@ h1, h2, h3, h4, h5, h6 { font-family: Times, 'Times New Roman', serif;
     margin-bottom: 20px;
 }
 
-.article-title {
+.card-title {
     color: #000000;
 }
 
-a.article-title:hover {
+a.card-title:hover {
     color: #ff8800;
     text-decoration: none;
 }
 
-.article-content {
+.card-text {
     white-space: pre-line;
 }
 

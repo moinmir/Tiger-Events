@@ -31,28 +31,39 @@
         </div>
     </div>
 </div>
-{% for event in org_events %}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
-                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
-                    to Calendar</a>
+
+{% for event in org_events%}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
             </div>
-            <div>
-                <p>Organized by: {{event.host.name}}</p>
-                <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{event.start_date.strftime("%I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</p>
-                <p>Location: {{event.location}}</p>
+            <div class="col">
+                <h2 class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
             </div>
         </div>
-        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
-        <p class="article-content">{{ event.description }}</p>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{event.location}}</button>
+                    <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
+            </div>
+        </div>
+
+        <p class="card-text">{{ event.description }}</p>
     </div>
-</article>
+</div>
 {% endfor %}
 
 <div class="row my-3">
@@ -62,30 +73,6 @@
         </div>
     </div>
 </div>
-
-{% for event in events%}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
-                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
-                    to Calendar</a>
-            </div>
-            <div>
-                <p>Organized by: {{event.host.name}}</p>
-                <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{event.start_date.strftime("%I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</p>
-                <p>Location: {{event.location}}</p>
-            </div>
-        </div>
-        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
-        <p class="article-content">{{ event.description }}</p>
-    </div>
-</article>
-{% endfor %}
 
 {% for event in events%}
 <div class="card">
@@ -112,7 +99,6 @@
                     <button type="button" class="btn btn-light">{{event.host.name}}</button>
                     <button type="button" class="btn btn-light">{{event.location}}</button>
                     <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
-                    <span class="badge rounded-pill bg-light text-dark">Light</span>
                   </div>
             </div>
         </div>
