@@ -6,7 +6,6 @@ from tigerevents import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from flask import current_app
 import os
 
 # get user object
@@ -90,6 +89,8 @@ class User(db.Model, UserMixin):
             self.following.append(org)
             return self
     
+    
+    # Unfollow an organization.
     def unfollow(self, org):
         if org in self.following:
             self.following.remove(org)
@@ -130,14 +131,9 @@ class User(db.Model, UserMixin):
         if self.urole == "Host":
             return self.following[0]
         else:
-            return None
-
-
-
-
-        
+            return None        
 ###############################################################################
-
+###############################################################################
 class EventQuery(BaseQuery, SearchQueryMixin):
     pass
 
@@ -187,12 +183,8 @@ class Event(db.Model):
                 return True
 
         return False 
-
-
-
-
 ###############################################################################
-
+###############################################################################
 class Organization(db.Model):
     __tablename__='nice_organization'
 
@@ -219,7 +211,7 @@ class Organization(db.Model):
     def __repr__(self):
         return f"Event('{self.name}', '{self.date_created}')"
 ###############################################################################
-
+###############################################################################
 class Tag(db.Model):
     __tablename__='nice_tag'
 

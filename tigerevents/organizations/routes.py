@@ -1,5 +1,5 @@
-from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
-from flask_login import login_user, current_user, login_required
+from flask import render_template, url_for, flash, redirect, Blueprint
+from flask_login import current_user, login_required
 from tigerevents import db
 from tigerevents.models import Organization, User, a_follow
 
