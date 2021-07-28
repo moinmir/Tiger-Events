@@ -95,7 +95,7 @@
                 <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
             </div>
             <div class="col">
-                <h2 class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</h2>
+                <h2><a class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
             </div>
             <div class="col-sm-auto">
                 <a class="btn btn-primary btn-sm mt-1 mb-1"
@@ -112,7 +112,6 @@
                     <button type="button" class="btn btn-light">{{event.host.name}}</button>
                     <button type="button" class="btn btn-light">{{event.location}}</button>
                     <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
-                    <span class="badge rounded-pill bg-light text-dark">Light</span>
                   </div>
             </div>
         </div>
@@ -120,6 +119,24 @@
         <p class="card-text">{{ event.description }}</p>
     </div>
 </div>
+{% endfor %}
+
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+<!-- For production setup JSX preprocessor -->
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+
+{% for event in events%}
+<div id="event_card"></div>
+<!-- Load our React component. -->
+<script src="{{ url_for('static', filename='react/event_card.js') }}" type="text/babel">
+    const vent = "{{event}}";
+    const imgurl = "{{ url_for('static', filename='org_pics/default.jpg') }}";
+    const eventurl = "{{ url_for('events.event', event_id=event.id)}}";
+</script>
 {% endfor %}
 
 {% endblock content %}
