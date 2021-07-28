@@ -108,22 +108,4 @@
 </div>
 {% endfor %}
 
-<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-
-<!-- For production setup JSX preprocessor -->
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-
-
-{% for event in events%}
-<div id="event_card"></div>
-<!-- Load our React component. -->
-<script src="{{ url_for('static', filename='react/event_card.js') }}" type="text/babel">
-    const vent = "{{event}}";
-    const imgurl = "{{ url_for('static', filename='org_pics/default.jpg') }}";
-    const eventurl = "{{ url_for('events.event', event_id=event.id)}}";
-</script>
-{% endfor %}
-
 {% endblock content %}
