@@ -84,6 +84,7 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.email}')"
     
+    # Follow an organization
     def follow(self, org):
         if not org in self.following:
             self.following.append(org)
@@ -96,37 +97,45 @@ class User(db.Model, UserMixin):
             self.following.remove(org)
             return self
     
+    # Is user going to event?
     def is_going(self, event):
         if self.is_saved(event):
             return Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id)[0].going
         else:
             return False
 
+    # return all events that the user is going to
     def going_to(self):
         return [assoc.event for assoc in Saved.query.filter_by(user_id = self.id).filter_by(going = True).all()]
     
-
+    # Returns true if the user has saved the event
     def is_saved(self, event):
         return len(Saved.query.filter_by(event_id = event.id).filter_by(user_id = self.id).all()) > 0
 
+    # Does the event clash with the user's calendar?
     def clash(self, event):
         events = [assoc.event for assoc in Saved.query.filter_by(user_id = self.id).filter_by(going = True).all()]
 
         for myevent in events:
             if myevent.event_clash(event):
                 return True
-        
+
         return False
     
+    # Get iCal link for syncing with external calendar
     def get_link(self):
         return os.path.join("tigerevents.herokuapp.com", self.ical_uuid.hex + ".ics")
 
+    # returns all events hosted by organizations followed by the user
     def org_events(self):
         events = []
         for org in self.following:
             events.extend(org.events)
         return events
     
+    """
+    Returns all events that the user has hosted
+    """
     def host_of(self):
         if self.urole == "Host":
             return self.following[0]
@@ -166,6 +175,7 @@ class Event(db.Model):
     def __repr__(self):
         return f"Event('{self.title}', '{self.date_posted}')"
 
+    # do these events clash
     def event_clash(self, event):
         start1, end1 = self.start_date, self.end_date
         start2, end2 = event.start_date, event.end_date
@@ -235,4 +245,8 @@ class Tag(db.Model):
     # functions/methods
     def __repr__(self):
         return f"Event('{self.name}')"
+
+    # get all events with this tag
+    def filter_events(self):
+        return self.events
 ###############################################################################
