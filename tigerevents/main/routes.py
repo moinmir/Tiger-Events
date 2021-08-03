@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, json
 from tigerevents.models import Event, Saved
 from flask_login import login_user, current_user, login_required
 from tigerevents import db
@@ -20,6 +20,38 @@ def home():
     form = SearchForm()
 
     return render_template("home.html", events=events, org_events=org_events, title="Home", form=form)
+
+@main.route("/home/json")
+@login_required
+def home2():
+    myevents = current_user.going_to()
+    org_events = current_user.org_events()
+    all_events = Event.query.all()
+    events = [event for event in all_events if event not in myevents]
+    org_events = [event for event in org_events if event not in myevents]
+    events = [event for event in events if event not in org_events]
+
+    return json.jsonify(
+        {"events" : [
+            {
+                "id": i,
+                "title" : event.title,
+                "hostname" : event.host.name,
+                "location" : event.location,
+                "startdate" : event.start_date.strftime("%a %b %-d, %I:%M%p"),
+                "enddate" : event.end_date.strftime("%I:%M%p"),
+                "description": event.description
+            } for (i, event) in zip(range(len(events)), events)]
+        }
+        
+    )
+
+    #n=len(events),
+    #titles= [event.title for event in events],
+    #hostnames= [event.host.name for event in events],
+    #locations= [event.location for event in events],
+    #startdates = [event.start_date.strftime("%a %b %-d, %I:%M%p") for event in events],
+    #enddates = [event.end_date.strftime("%I:%M%p") for event in events]
 
 @main.route("/search")
 def search():

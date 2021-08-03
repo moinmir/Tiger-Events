@@ -49,7 +49,7 @@ def save(event_id):
     )
 
     return redirect(url_for("main.home"))
-
+    
 
 @events.route("/event/rsvp/<int:event_id>")
 @login_required(role='ANY')
