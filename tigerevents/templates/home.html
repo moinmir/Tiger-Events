@@ -31,28 +31,39 @@
         </div>
     </div>
 </div>
-{% for event in org_events %}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
-                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
-                    to Calendar</a>
+
+{% for event in org_events%}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
             </div>
-            <div>
-                <p>Organized by: {{event.host.name}}</p>
-                <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{event.start_date.strftime("%I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</p>
-                <p>Location: {{event.location}}</p>
+            <div class="col">
+                <h2 class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
             </div>
         </div>
-        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
-        <p class="article-content">{{ event.description }}</p>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{event.location}}</button>
+                    <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
+            </div>
+        </div>
+
+        <p class="card-text">{{ event.description }}</p>
     </div>
-</article>
+</div>
 {% endfor %}
 
 <div class="row my-3">
@@ -64,26 +75,151 @@
 </div>
 
 {% for event in events%}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
-                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.rsvp', event_id=event.id) }}">Add
-                    to Calendar</a>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
             </div>
-            <div>
-                <p>Organized by: {{event.host.name}}</p>
-                <p>Date: {{event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{event.start_date.strftime("%I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</p>
-                <p>Location: {{event.location}}</p>
+            <div class="col">
+                <h2><a class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.save', event_id=event.id) }}">Save</a>
+                
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.rsvp', event_id=event.id) }}">Add to Calendar</a>
             </div>
         </div>
-        <h2><a class="article-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</a></h2>
-        <p class="article-content">{{ event.description }}</p>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{event.location}}</button>
+                    <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
+            </div>
+        </div>
+
+        <p class="card-text">{{ event.description }}</p>
     </div>
-</article>
+</div>
 {% endfor %}
+
+<div id="thispage2"> </div>
+
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+<!-- For production setup JSX preprocessor -->
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<script type="text/babel">
+
+    document.addEventListener('DOMContentLoaded', () => {
+        ReactDOM.render(
+            <AllEvents />,
+            document.getElementById('thispage')
+        );
+    })
+
+    'use strict';
+    const e = React.createElement;
+
+    class AllEvents extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                counter: 0,
+                events: []
+            };
+            this.addEvent = this.addEvent.bind(this);
+        }
+
+        componentDidMount() {
+            window.onscroll =  () => {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    fetch('/home/json')
+                    .then(response => response.json())
+                    .then(data => data.events.forEach(this.addEvent));
+                }
+            };
+        }
+
+        addEvent(thing) {
+            this.setState((state, props) => {
+                return {
+                    counter: state.counter + 1,
+                    events: [...state.events, thing]
+                }
+            });
+        }
+
+        render() {
+            console.log(this.state.events);
+            return (
+                <div>
+                    {this.state.events.map((thing, index) => (
+                        <EventCard key={index} thing={thing}/>
+                    ))}
+                </div>
+            );
+        }
+        
+    }
+
+
+    class EventCard extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {};
+        }
+
+        render() {
+            return (
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-1">
+                            <img class="article-img" src="" alt=""></img>
+                        </div>
+                        <div class="col">
+                            <h2><a class="card-title" href="">{ this.props.thing.title }</a></h2>
+                        </div>
+                        <div class="col-sm-auto">
+                            <a class="btn btn-primary btn-sm mt-1 mb-1"
+                                href="">Save</a>
+                            
+                            <a class="btn btn-primary btn-sm mt-1 mb-1"
+                                href="">Add to Calendar</a>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xl-auto">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-light">{this.props.thing.hostname}</button>
+                                <button type="button" class="btn btn-light">{this.props.thing.location}</button>
+                                <button type="button" class="btn btn-light">{this.props.thing.startdate} - {this.props.thing.enddate}</button>
+                                </div>
+                        </div>
+                    </div>
+
+                    <p class="card-text">{ this.props.thing.description }</p>
+                </div>
+            </div>
+            );
+        }
+    }
+
+    const domContainer = document.querySelector('#thispage2');
+    console.log("test2");
+    ReactDOM.render(e(AllEvents), domContainer); 
+
+</script>
+
+
 {% endblock content %}

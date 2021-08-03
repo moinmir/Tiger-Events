@@ -10,54 +10,74 @@
 </style>
 <h4>Use this URL to see this schedule on your Calendar: {{link}}</h4>
 <h2>Going</h2>
+
 {% for assoc in events %}
 {% if assoc.going %}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+            </div>
+            <div class="col">
+                <h2 class="card-title" href="{{ url_for('events.event', event_id=assoc.event.id)}}">{{ assoc.event.title }}</h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
                     href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
             </div>
-            <div>
-                <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
-                </p>
-                <p>Location: {{assoc.event.location}}</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{assoc.event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{assoc.event.location}}</button>
+                    <button type="button" class="btn btn-light">{{assoc.event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
             </div>
         </div>
-        <h2>{{ assoc.event.title }}</h2>
-        <p class="article-content">{{ assoc.event.description }}</p>
+
+        <p class="card-text">{{ assoc.event.description }}</p>
     </div>
-</article>
+</div>
 {% endif %}
 {% endfor %}
+
+
 <h2>Saved</h2>
 {% for assoc in events %}
 {% if not assoc.going %}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
-    <div class="media-body">
-        <div class="article-metadata">
-            <div>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+            </div>
+            <div class="col">
+                <h2 class="card-title" href="{{ url_for('events.event', event_id=assoc.event.id)}}">{{ assoc.event.title }}</h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
                     href="{{ url_for('events.remove', event_id=assoc.event.id) }}">Remove</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
                     href="{{ url_for('events.rsvp', event_id=assoc.event.id) }}">Add to Calendar</a>
             </div>
-            <div>
-                <p>Organized by: {{assoc.event.host.name}}</p>
-                <p>Date: {{assoc.event.start_date.strftime("%a, %m/%d/%Y")}}</p>
-                <p>Time: {{assoc.event.start_date.strftime("%I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}
-                </p>
-                <p>Location: {{assoc.event.location}}</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{assoc.event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{assoc.event.location}}</button>
+                    <button type="button" class="btn btn-light">{{assoc.event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{assoc.event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
             </div>
         </div>
-        <h2>{{ assoc.event.title }}</h2>
-        <p class="article-content">{{ assoc.event.description }}</p>
+
+        <p class="card-text">{{ assoc.event.description }}</p>
     </div>
-</article>
+</div>
 {% endif %}
 {% endfor %}
 {% endblock content %}
