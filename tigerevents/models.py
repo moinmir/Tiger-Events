@@ -30,23 +30,23 @@ class Saved(db.Model):
     user = db.relationship("User", back_populates="events")
 
 a_follow = db.Table("follow",
-                    db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
-                    db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'))
+                    db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id'), primary_key=True),
+                    db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'), primary_key=True)
                    )
 
 a_org_tags = db.Table("org_tags",
-                      db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id')),
-                      db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                      db.Column("org_id", db.Integer, db.ForeignKey('nice_organization.id'), primary_key=True),
+                      db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'), primary_key=True)
                      )
 
 a_event_tags = db.Table("event_tags",
-                        db.Column("event_id", db.Integer, db.ForeignKey('nice_event.id')),
-                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                        db.Column("event_id", db.Integer, db.ForeignKey('nice_event.id'), primary_key=True),
+                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'), primary_key=True)
                        )
 
 a_user_tags = db.Table("user_tags",
-                        db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id')),
-                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'))
+                        db.Column("user_id", db.Integer, db.ForeignKey('nice_user.id'), primary_key=True),
+                        db.Column("tag_id", db.Integer, db.ForeignKey('nice_tag.id'), primary_key=True)
                       )
 
 ###############################################################################
