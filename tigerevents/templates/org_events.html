@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 style="color:rgb(2, 2, 0)">My Events</h1>
+<style>
+    body {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<h4>Use this URL to see this schedule on your Calendar: {{link}}</h4>
+
+<h2>Upcoming</h2>
+{% for event in events %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-1">
+                <img class="article-img" src="{{ url_for('static', filename='org_pics/default.jpg') }}" alt="">
+            </div>
+            <div class="col">
+                <h2 class="card-title" href="{{ url_for('events.event', event_id=event.id)}}">{{ event.title }}</h2>
+            </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.edit_event', event_id=event.id) }}">Edit</a>
+            </div>
+
+            <div class="col-sm-auto">
+                <a class="btn btn-primary btn-sm mt-1 mb-1"
+                    href="{{ url_for('events.delete_event', event_id=event.id) }}">Delete</a>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-auto">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light">{{event.host.name}}</button>
+                    <button type="button" class="btn btn-light">{{event.location}}</button>
+                    <button type="button" class="btn btn-light">{{event.start_date.strftime("%a %b %-d, %I:%M%p")}} - {{event.end_date.strftime("%I:%M%p")}}</button>
+                  </div>
+            </div>
+        </div>
+
+        <p class="card-text">{{ event.description }}</p>
+    </div>
+</div>
+{% endfor %}
+
+<h2>Past</h2>
+{% endblock content %}

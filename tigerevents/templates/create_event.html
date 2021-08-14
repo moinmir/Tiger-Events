@@ -4,50 +4,71 @@
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-botton mb-4">{{ legend }}</legend>
+
             <div class="form-group">
-                {{ form.title.label(class="form-control-label") }} {% if form.title.errors %} {{
-                form.title(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feedback">
-                    {% for error in form.title.errors %}
-                    <span>{{ error }}</span> {% endfor %}
-                </div>
-                {% else %} {{ form.title(class="form-control form-control-lg") }} {% endif %}
+                {{ form.title.label(class="form-control-label") }} 
+                {% if form.title.errors %} 
+                    {{form.title(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.title.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.title(class="form-control form-control-lg") }} 
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label(class="form-control-label") }} 
+                {% if form.description.errors %} 
+                    {{form.description(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.description(class="form-control form-control-lg") }} 
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.location.label(class="form-control-label") }} 
+                {% if form.location.errors %} 
+                    {{form.location(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.location.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.location(class="form-control form-control-lg") }} 
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{form.csrf_token}}
+                {{form.start_date.label(class="form-control-label")}}
+                {% if form.start_date.errors %} 
+                    {{form.start_date(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.start_date.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.start_date(class="datepicker") }}{{form.hidden_tag()}}  
+                {% endif %}
             </div>
             <div class="form-group">
-                {{ form.description.label(class="form-control-label") }} {% if form.description.errors %} {{
-                form.description(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feedback">
-                    {% for error in form.description.errors %}
-                    <span>{{ error }}</span> {% endfor %}
-                </div>
-                {% else %} {{ form.description(class="form-control form-control-lg") }} {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.location.label(class="form-control-label") }} {% if form.location.errors %} {{
-                form.location(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feedback">
-                    {% for error in form.location.errors %}
-                    <span>{{ error }}</span> {% endfor %}
-                </div>
-                {% else %} {{ form.location(class="form-control form-control-lg") }} {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.start_date.label(class="datepicker") }} {% if form.start_date.errors %} {{
-                form.start_date(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feedback">
-                    {% for error in form.start_date.errors %}
-                    <span>{{ error }}</span> {% endfor %}
-                </div>
-                {% else %} {{ form.start_date(class="form-control form-control-lg") }} {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.end_date.label(class="datepicker") }} {% if form.end_date.errors %} {{
-                form.end_date(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feedback">
-                    {% for error in form.end_date.errors %}
-                    <span>{{ error }}</span> {% endfor %}
-                </div>
-                {% else %} {{ form.end_date(class="form-control form-control-lg") }} {% endif %}
+                {{form.csrf_token}}
+                {{form.end_date.label(class="form-control-label")}} 
+                {% if form.end_date.errors %} 
+                    {{form.end_date(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.end_date.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.end_date(class="datepicker") }}{{form.hidden_tag()}} 
+                {% endif %}
             </div>
 
         </fieldset>

@@ -9,7 +9,7 @@ organizations = Blueprint("organizations", __name__)
 @login_required
 def org_page():
     # organizations followed by the user
-    myorgs = Organization.query.join(a_follow).join(User).filter(a_follow.c.user_id == current_user.id).all()
+    myorgs = Organization.query.join(a_follow).filter(a_follow.c.user_id == current_user.id).all()
 
     # organizations not followed by the user
     unorgs = Organization.query.all()

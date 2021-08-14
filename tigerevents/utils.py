@@ -7,7 +7,6 @@ def login_required(role="ANY"):
     def wrapper(fn):
         @wraps(fn)
         def decorated_view(*args, **kwargs):
-
             if not current_user.is_authenticated:
                return current_app.login_manager.unauthorized()
             urole = current_user.urole

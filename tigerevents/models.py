@@ -70,11 +70,16 @@ class User(db.Model, UserMixin):
                              back_populates="user", 
                              cascade="all, delete-orphan")
 
+    # officer of organization
+    org_id = db.Column(db.Integer, db.ForeignKey("nice_organization.id"), nullable=True)
+    hosting = db.relationship("Event", backref="creator", lazy=True)
+
     # association table
     following = db.relationship("Organization",
                                 secondary=a_follow,
                                 back_populates="followers",
-                               )
+                                )
+    
 
     tags = db.relationship("Tag",
                            secondary=a_user_tags,
@@ -131,16 +136,7 @@ class User(db.Model, UserMixin):
         events = []
         for org in self.following:
             events.extend(org.events)
-        return events
-    
-    """
-    Returns all events that the user has hosted
-    """
-    def host_of(self):
-        if self.urole == "Host":
-            return self.following[0]
-        else:
-            return None        
+        return events      
 ###############################################################################
 ###############################################################################
 class EventQuery(BaseQuery, SearchQueryMixin):
@@ -159,6 +155,7 @@ class Event(db.Model):
     end_date = db.Column(db.DateTime, nullable=False)
     search_vector = db.Column(TSVectorType('title','description','location'))
     
+    
     # relationships
     # association object
     participants = db.relationship("Saved", 
@@ -169,7 +166,8 @@ class Event(db.Model):
                            secondary=a_event_tags,
                            back_populates="events")
     
-    org_id = db.Column(db.Integer, db.ForeignKey("nice_organization.id"), nullable=False)
+    org_id = db.Column(db.Integer, db.ForeignKey("nice_organization.id"), nullable=True)
+    creator_id = db.Column(db.Integer, db.ForeignKey("nice_user.id"), nullable=False)
 
     # functions/methods
     def __repr__(self):
@@ -204,15 +202,17 @@ class Organization(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     description = db.Column(db.Text, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default="default_campaign.jpg")
+    
 
     # relationships
     events = db.relationship("Event", backref="host", lazy=True)
+    officer = db.relationship("User", backref="org", lazy=True)
 
     followers = db.relationship("User",
                                 secondary=a_follow,
                                 back_populates="following",
                                 )
-    
+            
     tags = db.relationship("Tag",
                            secondary=a_org_tags,
                            back_populates="organizations")

@@ -13,12 +13,9 @@ from tigerevents import db, bcrypt
 from tigerevents.models import User, Event, Saved
 from tigerevents.users.forms import (
     RegistrationForm,
-    LoginForm,
-    RequestResetForm,
-    ResetPasswordForm,
+    LoginForm
 )
 from tigerevents.users.cal import create_ical, save_ical
-import uuid
 import os
 
 users = Blueprint("users", __name__)
@@ -93,9 +90,3 @@ def download_ical(ical_uuid):
         return send_from_directory(ical_path, filename=ical_fn, as_attachment=True)
     except FileNotFoundError:
         abort(404)
-
-
-    
-    
-
-   

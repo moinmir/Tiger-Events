@@ -1,15 +1,19 @@
 from flask import render_template, request, Blueprint, json
 from tigerevents.models import Event, Saved
-from flask_login import login_user, current_user, login_required
-from tigerevents import db
+from flask_login import current_user
+from tigerevents.utils import login_required
 from tigerevents.main.forms import SearchForm
 
 main = Blueprint('main', __name__)
 
 @main.route("/")  # home page
 @main.route("/home")
-@login_required
+@login_required(role='ANY')
 def home():
+    # home page for host is different
+    if current_user.urole == "Host":
+        return render_template("org_events.html", title="My Events", events=current_user.hosting, link=current_user.get_link())
+
     myevents = current_user.going_to()
     org_events = current_user.org_events()
     all_events = Event.query.all()
